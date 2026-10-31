@@ -1,0 +1,41 @@
+{
+  "model": "XGBoost (tuned)",
+  "threshold": 0.42,
+  "input_features": [
+    "gender",
+    "SeniorCitizen",
+    "Partner",
+    "Dependents",
+    "tenure",
+    "PhoneService",
+    "MultipleLines",
+    "InternetService",
+    "OnlineSecurity",
+    "OnlineBackup",
+    "DeviceProtection",
+    "TechSupport",
+    "StreamingTV",
+    "StreamingMovies",
+    "Contract",
+    "PaperlessBilling",
+    "PaymentMethod",
+    "MonthlyCharges",
+    "TotalCharges"
+  ],
+  "cost_assumptions": {
+    "offer_cost": 50,
+    "revenue_months": 12,
+    "offer_success_rate": 0.3
+  },
+  "test_metrics": {
+    "pr_auc": 0.68,
+    "roc_auc": 0.862,
+    "recall": 0.856,
+    "precision": 0.487
+  },
+  "versions": {
+    "scikit-learn": "1.9.0",
+    "xgboost": "3.4.1"
+  },
+  "created": "2026-10-31"
+}
