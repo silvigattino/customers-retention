@@ -1,0 +1,9 @@
+*.ipynb
+.ipynb_checkpoints/
+__pycache__/
+*.csv
+.env
+sql/
+data/
+backup_*/
+*.pdf

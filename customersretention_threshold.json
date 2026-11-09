@@ -35,7 +35,8 @@
   },
   "versions": {
     "scikit-learn": "1.9.0",
-    "xgboost": "3.4.1"
+    "xgboost": "3.4.1",
+    "pandas": "3.0.3"
   },
-  "created": "2026-10-31"
+  "created": "2026-11-07"
 }

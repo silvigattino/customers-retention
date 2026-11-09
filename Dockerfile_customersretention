@@ -1,0 +1,30 @@
+# 1. Base image: Python 3.14 on Debian 12 (bookworm), supported by Microsoft's ODBC driver
+FROM python:3.14-slim-bookworm
+
+# 2. System libraries:
+#    - libgomp1: required by XGBoost
+#    - msodbcsql18 + unixodbc: Microsoft ODBC driver for SQL Server, used by pyodbc
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl gnupg ca-certificates libgomp1 \
+    && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
+       | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
+    && curl -fsSL https://packages.microsoft.com/config/debian/12/prod.list \
+       > /etc/apt/sources.list.d/mssql-release.list \
+    && apt-get update \
+    && ACCEPT_EULA=Y apt-get install -y --no-install-recommends msodbcsql18 unixodbc \
+    && rm -rf /var/lib/apt/lists/*
+
+# 3. Working directory inside the container
+WORKDIR /app
+
+# 4. Install Python dependencies (before copying the code, to reuse the cache)
+COPY requirements_customersretention.txt .
+RUN pip install --no-cache-dir -r requirements_customersretention.txt
+
+# 5. Copy only what the API needs (no .env: settings are passed at runtime)
+COPY main_customersretention.py features.py \
+     customersretention_pipeline.joblib customersretention_threshold.json ./
+
+# 6. Document the port and start the API in production mode
+EXPOSE 8000
+CMD ["fastapi", "run", "main_customersretention.py", "--port", "8000"]
